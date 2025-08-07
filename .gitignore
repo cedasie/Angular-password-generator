@@ -6,6 +6,9 @@
 /out-tsc
 # Only exists if Bazel was run
 /bazel-out
+.vscode/
+.vercel
+.angular
 
 # dependencies
 /node_modules
