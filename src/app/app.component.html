@@ -1,54 +1,162 @@
-<div class="container">
-  <div class="columns is-centered">
-    <div class="box column is-one-third">
-      <h1 class="title has-text-centered">Password Generator</h1>
+<!-- Main Content -->
+<section class="main-content">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8-tablet is-6-desktop is-5-widescreen">
+        <!-- Generator Card -->
+        <div class="kross-card">
+          <!-- Section Header -->
+          <div class="section-header">
+            <h2 class="section-title">Generate Your Password</h2>
+            <p class="section-subtitle">
+              Customize your password settings and generate a secure password
+              instantly
+            </p>
+          </div>
 
-      <div class="field">
-        <label>Length</label>
-        <input class="input" (input)="onChangeLength($event.target.value)" />
-      </div>
+          <!-- Password Length -->
+          <div class="form-group">
+            <label class="form-label">
+              <i class="fas fa-ruler-horizontal mr-2"></i>
+              Password Length
+            </label>
+            <div class="is-flex is-align-items-center gap-3">
+              <input
+                class="range-slider"
+                type="range"
+                min="4"
+                max="64"
+                [value]="length"
+                (input)="onChangeLength($event.target.value)"
+              />
+              <input
+                class="form-control"
+                style="max-width: 100px; text-align: center"
+                type="number"
+                min="4"
+                max="64"
+                [value]="length"
+                (input)="onChangeLength($event.target.value)"
+              />
+            </div>
+            <p class="help">Choose between 4 and 64 characters</p>
+          </div>
 
-      <div class="field">
-        <div class="control">
-          <label class="checkbox">
-            <input (change)="onChangeUseLetters()" type="checkbox" />
-            Use Letters
-          </label>
+          <!-- Character Sets -->
+          <div class="form-group">
+            <label class="form-label">
+              <i class="fas fa-key mr-2"></i>
+              Character Sets
+            </label>
+            <div class="checkbox-group">
+              <label class="checkbox-item">
+                <input
+                  type="checkbox"
+                  (change)="onChangeUseLetters()"
+                  [checked]="includeLetters"
+                />
+                <span>
+                  <i class="fas fa-font mr-2"></i>
+                  Letters (A-Z, a-z)
+                </span>
+              </label>
+              <label class="checkbox-item">
+                <input
+                  type="checkbox"
+                  (change)="onChangeUseNumbers()"
+                  [checked]="includeNumbers"
+                />
+                <span>
+                  <i class="fas fa-hashtag mr-2"></i>
+                  Numbers (0-9)
+                </span>
+              </label>
+              <label class="checkbox-item">
+                <input
+                  type="checkbox"
+                  (change)="onChangeUseSymbols()"
+                  [checked]="includeSymbols"
+                />
+                <span>
+                  <i class="fas fa-asterisk mr-2"></i>
+                  Symbols (!@#$%^&*)
+                </span>
+              </label>
+            </div>
+            <p class="help">Select at least one character set</p>
+          </div>
+
+          <!-- Generate Button -->
+          <div class="form-group text-center">
+            <button
+              class="btn-primary"
+              [disabled]="
+                !(
+                  length &&
+                  (includeLetters || includeSymbols || includeNumbers)
+                )
+              "
+              (click)="onButtonClick()"
+            >
+              <i class="fas fa-magic mr-2"></i>
+              Generate Password
+            </button>
+          </div>
+
+          <!-- Password Result -->
+          <div *ngIf="password" class="password-display">
+            <label class="form-label">
+              <i class="fas fa-shield-alt mr-2"></i>
+              Generated Password
+            </label>
+
+            <div class="field has-addons">
+              <div class="control is-expanded">
+                <input class="password-input" [value]="password" readonly />
+              </div>
+              <div class="control">
+                <button class="btn-secondary" (click)="copyToClipboard()">
+                  <i class="fas fa-copy mr-2"></i>
+                  Copy
+                </button>
+              </div>
+            </div>
+
+            <!-- Success Message -->
+            <div class="success-message" *ngIf="copied">
+              <i class="fas fa-check mr-2"></i>
+              Password copied to clipboard successfully!
+            </div>
+
+            <!-- Strength Meter -->
+            <div class="strength-meter">
+              <div class="level">
+                <div class="level-left">
+                  <div class="level-item">
+                    <p class="strength-label">
+                      <i class="fas fa-chart-line mr-2"></i>
+                      Strength: {{ strengthLabel }}
+                    </p>
+                  </div>
+                </div>
+                <div class="level-right">
+                  <div class="level-item">
+                    <p class="strength-label">{{ strengthPercent }}%</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="strength-bar">
+                <div
+                  class="strength-fill"
+                  [class]="getStrengthClass()"
+                  [style.width.%]="strengthPercent"
+                ></div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-
-      <div class="field">
-        <div class="control">
-          <label class="checkbox">
-            <input (change)="onChangeUseNumbers()" type="checkbox" />
-            Use Numbers
-          </label>
-        </div>
-      </div>
-
-      <div class="field">
-        <div class="control">
-          <label class="checkbox">
-            <input (change)="onChangeUseSymbols()" type="checkbox" />
-            Use Symbols
-          </label>
-        </div>
-      </div>
-
-      <button
-        [disabled]="
-          !(length && (includeLetters || includeSymbols || includeNumbers))
-        "
-        (click)="onButtonClick()"
-        class="button is-link is-fullwidth"
-      >
-        Generate!
-      </button>
-
-      <div class="box" *ngIf="password">
-        <label>Your Password</label>
-        <input class="input" [value]="password" />
       </div>
     </div>
   </div>
-</div>
+</section>
